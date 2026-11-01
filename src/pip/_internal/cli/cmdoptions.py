@@ -90,7 +90,7 @@ def check_only_deps_option_does_not_conflict(options: Values) -> None:
             conflicts[-1] = "or " + conflicts[-1]
         conflict_message = ", ".join(conflicts)
         raise CommandError(
-            f"Cannot use '--only-dependencies' in combination with {conflict_message}. "
+            f"不能将 '--only‑dependencies' 和 {conflict_message} 一起使用。"
             "If this is unexpected, please refer to the user guide:\n"
             "\n"
             "    https://pip.pypa.io/en/stable/user_guide/#installing-only-dependencies"

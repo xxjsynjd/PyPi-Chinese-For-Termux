@@ -99,7 +99,7 @@ class VenvBuildEnvironment(BuildEnvironment):
         if not os.path.exists(self.python_executable):
             # This error is only likely on Windows due to interference from AV software.
             raise VenvCreationError(
-                f"Python executable failed to copy to {self.python_executable}"
+                f"Python可执行文件复制失败，目标路径：{self.python_executable}"
             )
 
     def __enter__(self) -> None:

@@ -123,11 +123,11 @@ def parse_command(args: list[str]) -> tuple[str, list[str]]:
     if cmd_name not in commands_dict:
         guess = get_similar_commands(cmd_name)
 
-        msg = [f'unknown command "{cmd_name}"']
+        msg = [f'未知命令 "{cmd_name}"']
         if guess:
-            msg.append(f'maybe you meant "{guess}"')
+            msg.append(f'你是不是想输入 "{guess}"')
 
-        raise CommandError(" - ".join(msg))
+        raise CommandError(" —— ".join(msg))
 
     # all the args without the subcommand
     cmd_args = args[:]

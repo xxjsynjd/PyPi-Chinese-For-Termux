@@ -157,12 +157,12 @@ class Command(CommandContextMixIn):
 
             return BROKEN_STDOUT
         except KeyboardInterrupt:
-            logger.critical("Operation cancelled by user")
+            logger.critical("操作已被用户取消")
             logger.debug("Exception information:", exc_info=True)
 
             return ERROR
         except BaseException:
-            logger.critical("Exception:", exc_info=True)
+            logger.critical("发生异常：", exc_info=True)
 
             return UNKNOWN_ERROR
 
