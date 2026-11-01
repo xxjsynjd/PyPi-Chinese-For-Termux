@@ -366,7 +366,7 @@ class UninstallPathSet:
             return
 
         dist_name_version = f"{self._dist.raw_name}-{self._dist.raw_version}"
-        logger.info("正在卸载: %s:", dist_name_version)
+        logger.info("Uninstalling %s:", dist_name_version)
 
         with indent_log():
             if auto_confirm or self._allowed_to_proceed(verbose):
@@ -381,7 +381,7 @@ class UninstallPathSet:
                 for pth in self._pth.values():
                     pth.remove()
 
-                logger.info("成功卸载: %s", dist_name_version)
+                logger.info("Successfully uninstalled %s", dist_name_version)
 
     def _allowed_to_proceed(self, verbose: bool) -> bool:
         """Display which files would be deleted and prompt for confirmation"""

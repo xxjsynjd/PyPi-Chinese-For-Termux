@@ -134,12 +134,12 @@ class IndentingFormatter(logging.Formatter):
             return ""
         if formatted.startswith(DEPRECATION_MSG_PREFIX):
             # Then the message already has a prefix.  We don't want it to
-            # look like "警告: DEPRECATION: ...."
+            # look like "WARNING: DEPRECATION: ...."
             return ""
         if levelno < logging.ERROR:
-            return "警告: "
+            return "WARNING: "
 
-        return "错误: "
+        return "ERROR: "
 
     def format(self, record: logging.LogRecord) -> str:
         """

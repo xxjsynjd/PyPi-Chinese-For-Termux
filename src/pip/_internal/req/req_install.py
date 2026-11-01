@@ -698,7 +698,7 @@ class InstallRequirement:
         if not dist:
             logger.warning("Skipping %s as it is not installed.", self.name)
             return None
-        logger.info("发现已安装版本: %s", dist)
+        logger.info("Found existing installation: %s", dist)
 
         uninstalled_pathset = UninstallPathSet.from_dist(dist)
         uninstalled_pathset.remove(auto_confirm, verbose)

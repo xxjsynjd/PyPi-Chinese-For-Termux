@@ -55,7 +55,7 @@ def install_given_reqs(
 
     if to_install:
         logger.info(
-            "正在安装收集的包: %s",
+            "Installing collected packages: %s",
             ", ".join(to_install.keys()),
         )
 
@@ -75,7 +75,7 @@ def install_given_reqs(
             req_name = requirement.name
             assert req_name is not None
             if requirement.should_reinstall:
-                logger.info("尝试卸载: %s", req_name)
+                logger.info("Attempting uninstall: %s", req_name)
                 with indent_log():
                     uninstalled_pathset = requirement.uninstall(auto_confirm=True)
             else:

@@ -69,7 +69,7 @@ def main(args: list[str] | None = None) -> int:
     try:
         cmd_name, cmd_args = parse_command(args)
     except PipError as exc:
-        sys.stderr.write(f"错误: {exc}")
+        sys.stderr.write(f"ERROR: {exc}")
         sys.stderr.write(os.linesep)
         sys.exit(1)
 

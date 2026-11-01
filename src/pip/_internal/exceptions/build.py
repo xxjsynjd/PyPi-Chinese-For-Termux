@@ -35,7 +35,7 @@ class BuildDependencyInstallError(DiagnosticPipError):
         log_lines: list[str] | None,
     ) -> None:
         if isinstance(cause, PipError):
-            note = "这大概率不是pip的问题。"
+            note = "This is likely not a problem with pip."
         else:
             note = (
                 "pip crashed unexpectedly. Please file an issue on pip's issue "
@@ -47,7 +47,7 @@ class BuildDependencyInstallError(DiagnosticPipError):
             context = Text("See above for more details.")
         else:
             if isinstance(cause, PipError):
-                log_lines.append(f"错误: {cause}")
+                log_lines.append(f"ERROR: {cause}")
             else:
                 # Split rendered error into real lines without trailing newlines.
                 log_lines.extend(
@@ -165,7 +165,7 @@ class BackendUnavailableError(InstallationSubprocessError):
             message=f"Cannot import build backend {escape(backend_name)!r}.",
             context=backend_error,
             hint_stmt=None,
-            note_stmt="这大概率不是pip的问题。",
+            note_stmt="This is likely not a problem with pip.",
         )
         self.command_description = f"Calling build backend hook {hook_name}"
 

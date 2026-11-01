@@ -186,7 +186,7 @@ debug_mode: Callable[..., Option] = partial(
     action="store_true",
     default=False,
     help=(
-        "让未处理的异常在主流程之外抛出，"
+        "让未处理的异常直接抛出到主程序之外， "
         "而不是记录到 stderr。"
     ),
 )
@@ -198,7 +198,8 @@ isolated_mode: Callable[..., Option] = partial(
     action="store_true",
     default=False,
     help=(
-        "以隔离模式运行 pip，忽略环境变量和用户配置。"
+        "以隔离模式运行 pip，忽略环境变量和用户 "
+        "配置。"
     ),
 )
 
@@ -210,7 +211,7 @@ require_virtualenv: Callable[..., Option] = partial(
     action="store_true",
     default=False,
     help=(
-        "只允许pip在虚拟环境中运行；否则报错退出。"
+        "仅允许在虚拟环境中运行 pip；否则报错退出。"
     ),
 )
 
@@ -219,14 +220,14 @@ override_externally_managed: Callable[..., Option] = partial(
     "--break-system-packages",
     dest="override_externally_managed",
     action="store_true",
-    help="允许pip修改标记为EXTERNALLY-MANAGED的Python安装。",
+    help="Allow pip to modify an EXTERNALLY-MANAGED Python installation",
 )
 
 python: Callable[..., Option] = partial(
     Option,
     "--python",
     dest="python",
-    help="使用指定的Python解释器运行pip。",
+    help="使用指定的 Python 解释器运行 pip。",
 )
 
 verbose: Callable[..., Option] = partial(
@@ -236,7 +237,7 @@ verbose: Callable[..., Option] = partial(
     dest="verbose",
     action="count",
     default=0,
-    help="输出更多信息。可叠加，最多可使用3次。",
+    help="输出更详细的信息。可重复使用，最多 3 次。",
 )
 
 no_color: Callable[..., Option] = partial(
@@ -265,9 +266,9 @@ quiet: Callable[..., Option] = partial(
     action="count",
     default=0,
     help=(
-        "减少输出。可叠加，最多可使用3"
-        "次(分别对应WARNING、ERROR和CRITICAL"
-        "日志级别)。"
+        "输出更少的信息。可重复使用，最多 3"
+        " 次（对应 WARNING、ERROR、CRITICAL 日志"
+        " 级别）。"
     ),
 )
 
@@ -281,7 +282,7 @@ progress_bar: Callable[..., Option] = partial(
     help=(
         "Specify whether the progress bar should be used. In 'auto'"
         " mode, --quiet will suppress all progress bars."
-        " [auto, on, off, raw] (default: auto)"
+        " [auto, on, off, raw] （默认: auto）"
     ),
 )
 
@@ -293,7 +294,7 @@ log: Callable[..., Option] = partial(
     dest="log",
     metavar="path",
     type="path",
-    help="Path to a verbose appending log.",
+    help="详细日志文件路径（追加模式）。",
 )
 
 no_input: Callable[..., Option] = partial(
@@ -303,7 +304,7 @@ no_input: Callable[..., Option] = partial(
     dest="no_input",
     action="store_true",
     default=False,
-    help="Disable prompting for input.",
+    help="禁用输入提示。",
 )
 
 keyring_provider: Callable[..., Option] = partial(
@@ -313,9 +314,9 @@ keyring_provider: Callable[..., Option] = partial(
     choices=["auto", "disabled", "import", "subprocess"],
     default="auto",
     help=(
-        "Enable the credential lookup via the keyring library if user input is allowed."
-        " Specify which mechanism to use [auto, disabled, import, subprocess]."
-        " (default: %default)"
+        "如果允许用户输入，通过 keyring 库启用凭据查找。"
+        " 指定使用哪种机制 [auto, disabled, import, subprocess]。"
+        " （默认: %default）"
     ),
 )
 
@@ -325,7 +326,7 @@ proxy: Callable[..., Option] = partial(
     dest="proxy",
     type="str",
     default=None,
-    help="Specify a proxy in the form scheme://[user:passwd@]proxy.server:port.",
+    help="以 scheme://[user:passwd@]proxy.server:port 形式指定代理。",
 )
 
 no_proxy_env: Callable[..., Option] = partial(
@@ -334,7 +335,7 @@ no_proxy_env: Callable[..., Option] = partial(
     dest="no_proxy_env",
     action="store_true",
     default=False,
-    help="Do not read proxy configuration from environment variables.",
+    help="不读取环境变量中的代理配置。",
 )
 
 retries: Callable[..., Option] = partial(
@@ -343,7 +344,7 @@ retries: Callable[..., Option] = partial(
     dest="retries",
     type="int",
     default=5,
-    help="Maximum attempts to establish a new HTTP connection. (default: %default)",
+    help="建立新 HTTP 连接的最大尝试次数。（默认: %default）",
 )
 
 resume_retries: Callable[..., Option] = partial(
@@ -352,8 +353,8 @@ resume_retries: Callable[..., Option] = partial(
     dest="resume_retries",
     type="int",
     default=5,
-    help="Maximum attempts to resume or restart an incomplete download. "
-    "(default: %default)",
+    help="恢复或重新开始未完成下载的最大尝试次数。"
+    "（默认: %default）",
 )
 
 timeout: Callable[..., Option] = partial(
@@ -364,7 +365,7 @@ timeout: Callable[..., Option] = partial(
     dest="timeout",
     type="float",
     default=15,
-    help="Set the socket timeout (default %default seconds).",
+    help="设置套接字超时时间（默认 %default 秒）。",
 )
 
 
@@ -378,8 +379,8 @@ def exists_action() -> Option:
         default=[],
         action="append",
         metavar="action",
-        help="Default action when a path already exists: "
-        "(s)witch, (i)gnore, (w)ipe, (b)ackup, (a)bort.",
+        help="路径已存在时的默认操作: "
+        "(s)切换, (i)忽略, (w)清除, (b)备份, (a)中止。",
     )
 
 
@@ -390,10 +391,10 @@ cert: Callable[..., Option] = partial(
     type="path",
     metavar="path",
     help=(
-        "Path to PEM-encoded CA certificate bundle. "
-        "If provided, overrides the default. "
-        "See 'SSL Certificate Verification' in pip documentation "
-        "for more information."
+        "PEM 编码的 CA 证书包路径。"
+        "如果提供，将覆盖默认值。"
+        "参见 pip 文档中的「SSL 证书验证」"
+        "获取更多信息。"
     ),
 )
 
@@ -404,8 +405,8 @@ client_cert: Callable[..., Option] = partial(
     type="path",
     default=None,
     metavar="path",
-    help="Path to SSL client certificate, a single file containing the "
-    "private key and the certificate in PEM format.",
+    help="SSL 客户端证书路径，单个文件，包含 "
+    "PEM 格式的私钥和证书。",
 )
 
 index_url: Callable[..., Option] = partial(
@@ -442,7 +443,7 @@ no_index: Callable[..., Option] = partial(
     dest="no_index",
     action="store_true",
     default=False,
-    help="Ignore package index (only looking at --find-links URLs instead).",
+    help="忽略软件包索引（仅查找 --find-links 指定的 URL）。",
 )
 
 
@@ -534,8 +535,8 @@ def trusted_host() -> Option:
         action="append",
         metavar="HOSTNAME",
         default=[],
-        help="Mark this host or host:port pair as trusted, even though it "
-        "does not have valid or any HTTPS.",
+        help="将此主机或 主机:端口 标记为可信，即使它 "
+        "没有有效的 HTTPS 证书。",
     )
 
 
@@ -931,7 +932,7 @@ cache_dir: Callable[..., Option] = partial(
     default=USER_CACHE_DIR,
     metavar="dir",
     type="path",
-    help="Store the cache data in <dir>.",
+    help="将缓存数据存储到 <dir>。",
 )
 
 
@@ -970,7 +971,7 @@ no_cache: Callable[..., Option] = partial(
     dest="cache_dir",
     action="callback",
     callback=_handle_no_cache_dir,
-    help="Disable the cache.",
+    help="禁用缓存。",
 )
 
 no_deps: Callable[..., Option] = partial(
@@ -980,7 +981,7 @@ no_deps: Callable[..., Option] = partial(
     dest="ignore_dependencies",
     action="store_true",
     default=False,
-    help="Don't install package dependencies.",
+    help="不安装软件包依赖。",
 )
 
 
@@ -1082,7 +1083,7 @@ ignore_requires_python: Callable[..., Option] = partial(
     "--ignore-requires-python",
     dest="ignore_requires_python",
     action="store_true",
-    help="Ignore the Requires-Python information.",
+    help="忽略 Requires-Python 信息。",
 )
 
 
@@ -1103,7 +1104,7 @@ check_build_deps: Callable[..., Option] = partial(
     dest="check_build_deps",
     action="store_true",
     default=False,
-    help="Check the build dependencies.",
+    help="检查构建依赖。",
 )
 
 
@@ -1155,7 +1156,7 @@ no_clean: Callable[..., Option] = partial(
     "--no-clean",
     action="store_true",
     default=False,
-    help="Don't clean up build directories.",
+    help="不清理构建目录。",
 )
 
 pre: Callable[..., Option] = partial(
@@ -1172,7 +1173,7 @@ json: Callable[..., Option] = partial(
     "--json",
     action="store_true",
     default=False,
-    help="Output data in a machine-readable JSON format.",
+    help="以机器可读的 JSON 格式输出数据。",
 )
 
 disable_pip_version_check: Callable[..., Option] = partial(
@@ -1181,8 +1182,8 @@ disable_pip_version_check: Callable[..., Option] = partial(
     dest="disable_pip_version_check",
     action="store_true",
     default=False,
-    help="Don't periodically check PyPI to determine whether a new version "
-    "of pip is available for download. Implied with --no-index.",
+    help="不定期检查 PyPI 是否有新版本的 "
+    "pip 可下载。与 --no-index 同时生效。",
 )
 
 root_user_action: Callable[..., Option] = partial(
@@ -1191,7 +1192,7 @@ root_user_action: Callable[..., Option] = partial(
     dest="root_user_action",
     default="warn",
     choices=["warn", "ignore"],
-    help="Action if pip is run as a root user [warn, ignore] (default: warn)",
+    help="pip 以 root 用户运行时的操作 [warn, ignore]（默认: warn）",
 )
 
 
@@ -1279,7 +1280,7 @@ list_exclude: Callable[..., Option] = partial(
     action="append",
     metavar="package",
     type="package_name",
-    help="Exclude specified package from the output",
+    help="从输出中排除指定的软件包",
 )
 
 
@@ -1313,7 +1314,7 @@ use_new_feature: Callable[..., Option] = partial(
         "venv-isolation",
     ]
     + ALWAYS_ENABLED_FEATURES,
-    help="Enable new functionality, that may be backward incompatible.",
+    help="启用可能向后不兼容的新功能。",
 )
 
 use_deprecated_feature: Callable[..., Option] = partial(
@@ -1327,7 +1328,7 @@ use_deprecated_feature: Callable[..., Option] = partial(
         "legacy-resolver",
         "legacy-certs",
     ],
-    help=("Enable deprecated functionality, that will be removed in the future."),
+    help=("启用已弃用的功能，这些功能将来会被移除。"),
 )
 
 ##########
@@ -1335,7 +1336,7 @@ use_deprecated_feature: Callable[..., Option] = partial(
 ##########
 
 general_group: dict[str, Any] = {
-    "name": "General Options",
+    "name": "通用选项",
     "options": [
         help_,
         debug_mode,

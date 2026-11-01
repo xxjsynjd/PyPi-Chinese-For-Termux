@@ -57,7 +57,7 @@ def get_path_uid(path: str) -> int:
         file_uid = os.fstat(fd).st_uid
         os.close(fd)
     else:  # AIX and Jython
-        # 警告: time of check vulnerability, but best we can do w/o NOFOLLOW
+        # WARNING: time of check vulnerability, but best we can do w/o NOFOLLOW
         if not os.path.islink(path):
             # older versions of Jython don't have `os.fstat`
             file_uid = os.stat(path).st_uid

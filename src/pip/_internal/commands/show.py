@@ -49,7 +49,7 @@ class ShowCommand(Command):
 
     def run(self, options: Values, args: list[str]) -> int:
         if not args:
-            logger.warning("错误: Please provide a package name or names.")
+            logger.warning("ERROR: Please provide a package name or names.")
             return ERROR
         query = args
 

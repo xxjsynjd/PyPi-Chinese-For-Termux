@@ -123,6 +123,7 @@ def _build_one(
     output_dir: str,
     verify: bool,
     editable: bool,
+    wheel_dir: str | None = None,
 ) -> str | None:
     """Build one wheel.
 
@@ -142,7 +143,7 @@ def _build_one(
 
     # Install build deps into temporary directory (PEP 518)
     with req.build_env:
-        wheel_path = _build_one_inside_env(req, output_dir, editable)
+        wheel_path = _build_one_inside_env(req, output_dir, editable, wheel_dir=wheel_dir)
     if wheel_path and verify:
         try:
             _verify_one(req, wheel_path)
@@ -156,6 +157,7 @@ def _build_one_inside_env(
     req: InstallRequirement,
     output_dir: str,
     editable: bool,
+    wheel_dir: str | None = None,
 ) -> str | None:
     with TemporaryDirectory(dir=output_dir) as wheel_directory:
         assert req.name
@@ -181,23 +183,26 @@ def _build_one_inside_env(
             dest_path = os.path.join(output_dir, wheel_name)
             try:
                 wheel_hash, length = hash_file(wheel_path)
+                if wheel_dir is not None:
+                    final_path = os.path.abspath(os.path.join(wheel_dir, wheel_name))
+                    cmd_base_dir = wheel_dir
+                else:
+                    final_path = wheel_name
+                    cmd_base_dir = "."
                 # We can do a replace here because wheel_path is guaranteed to
                 # be in the same filesystem as output_dir. This will perform an
                 # atomic rename, which is necessary to avoid concurrency issues
                 # when populating the cache.
                 os.replace(wheel_path, dest_path)
                 logger.info(
-                    "Created wheel for %s: filename=%s size=%d sha256=%s",
-                    req.name,
-                    wheel_name,
-                    length,
-                    wheel_hash.hexdigest(),
+                     "已为 %s 构建轮子：文件名：%s 大小：%d sha256：%s，安装方式：\n#bash\npip install --force-reinstall %s \n\n或者：#bash\nfind -name \"*.whl\" -exec pip install --force-reinstall {} \\;",
+                    req.name, wheel_name, length, wheel_hash.hexdigest(), final_path
                 )
                 logger.info("Stored in directory: %s", output_dir)
                 return dest_path
             except Exception as e:
                 logger.warning(
-                    "Building wheel for %s failed: %s",
+                    "为%s 构建轮子，构建失败：%s",
                     req.name,
                     e,
                 )
@@ -205,28 +210,29 @@ def _build_one_inside_env(
 
 
 def build(
-    requirements: Iterable[InstallRequirement],
+    requirement_set: RequirementSet,
     wheel_cache: WheelCache,
     verify: bool,
     allow_editables: bool,
+    wheel_dir: str | None = None,  # 这里！新增可选命名参数，带=None默认值
 ) -> BuildResult:
     """Build wheels.
 
     :return: The list of InstallRequirement that succeeded to build and
         the list of InstallRequirement that failed to build.
     """
-    if not requirements:
+    if not requirement_set:
         return [], []
 
     # Build the wheels.
     logger.info(
-        "Building wheels for collected packages: %s",
-        ", ".join(req.name for req in requirements),  # type: ignore
+        "正在为收集到的软件包构建轮子：%s",
+        ", ".join(req.name for req in requirement_set),  # type: ignore
     )
 
     with indent_log():
         build_successes, build_failures = [], []
-        for req in requirements:
+        for req in requirement_set:
             assert req.name
             cache_dir = _get_cache_dir(req, wheel_cache)
             wheel_file = _build_one(
@@ -234,6 +240,7 @@ def build(
                 cache_dir,
                 verify,
                 req.editable and allow_editables,
+                wheel_dir=wheel_dir,
             )
             if wheel_file:
                 # Record the download origin in the cache
@@ -253,7 +260,7 @@ def build(
     # notify success/failure
     if build_successes:
         logger.info(
-            "Successfully built %s",
+            "构建成功：%s",
             " ".join([req.name for req in build_successes]),  # type: ignore
         )
     if build_failures:

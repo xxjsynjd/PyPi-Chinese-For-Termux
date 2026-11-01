@@ -290,7 +290,7 @@ class LinkCandidate(_InstallRequirementBackedCandidate):
         source_link = link
         cache_entry = factory.get_wheel_cache_entry(source_link, name)
         if cache_entry is not None:
-            logger.debug("使用缓存: wheel link: %s", cache_entry.link)
+            logger.debug("Using cached wheel link: %s", cache_entry.link)
             link = cache_entry.link
         ireq = make_install_req_from_link(
             link,
@@ -379,7 +379,7 @@ class AlreadyInstalledCandidate(Candidate):
         # The returned dist would be exactly the same as self.dist because we
         # set satisfied_by in _make_install_req_from_dist.
         # TODO: Supply reason based on force_reinstall and upgrade_strategy.
-        skip_reason = "already satisfied"
+        skip_reason = "已满足"
         factory.preparer.prepare_installed_requirement(self._ireq, skip_reason)
 
     def __str__(self) -> str:

@@ -138,7 +138,7 @@ class Command(CommandContextMixIn):
             # sys.stderr.write, so a full pipe buffer returns EPIPE instead
             # of deadlocking (Windows anonymous pipes are ~4KB).
             try:
-                os.write(2, b"Error: Pipe to stdout was broken\n")
+                os.write(2, b"ERROR: Pipe to stdout was broken\n")
                 if level_number <= logging.DEBUG:
                     encoding = getattr(sys.stderr, "encoding", None) or "utf-8"
                     os.write(

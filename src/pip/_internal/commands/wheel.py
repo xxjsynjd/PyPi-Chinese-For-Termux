@@ -156,6 +156,7 @@ class WheelCommand(RequirementCommand):
             wheel_cache=wheel_cache,
             verify=(not options.no_verify),
             allow_editables=False,
+            wheel_dir=options.wheel_dir,
         )
         for req in build_successes:
             assert req.link and req.link.is_wheel

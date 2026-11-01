@@ -683,7 +683,10 @@ class InstallCommand(RequirementCommand):
             )
         else:
             assert resolver_variant == "resolvelib"
-            parts.append("pip 的依赖解析器当前没有考虑到所有已安装的包。这种行为是导致以下依赖冲突的原因:\n"
+            parts.append(
+                "pip's dependency resolver does not currently take into account "
+                "all the packages that are installed. This behaviour is the "
+                "source of the following dependency conflicts."
             )
 
         # NOTE: There is some duplication here, with commands/check.py
@@ -691,8 +694,8 @@ class InstallCommand(RequirementCommand):
             version = package_set[project_name][0]
             for dependency in missing[project_name]:
                 message = (
-                    f"工具包名：{project_name}，版本号：{version}需要{dependency[1]}, "
-                    "但该包尚未安装。"
+                    f"{project_name} {version} requires {dependency[1]}, "
+                    "which is not installed."
                 )
                 parts.append(message)
 
@@ -700,8 +703,8 @@ class InstallCommand(RequirementCommand):
             version = package_set[project_name][0]
             for dep_name, dep_version, req in conflicting[project_name]:
                 message = (
-                    "{name} {version}需要{requirement}，但你当前安装的 "
-                    "{dep_name} {dep_version}版本不兼容。"
+                    "{name} {version} requires {requirement}, but {you} have "
+                    "{dep_name} {dep_version} which is incompatible."
                 ).format(
                     name=project_name,
                     version=version,
@@ -736,7 +739,7 @@ def installed_packages_summary(
 
     if not summary:
         return ""
-    return f"成功安装: {' '.join(summary)}"
+    return f"安装成功： {' '.join(summary)}"
 
 
 def get_lib_location_guesses(
@@ -886,12 +889,16 @@ def create_os_error_message(
     if WINDOWS and error.errno in (errno.EINVAL, errno.ENOENT) and error.filename:
         if any(len(part) > 255 for part in Path(error.filename).parts):
             parts.append(
-                "提示：此错误可能是因为文件或文件夹名称超过了255个字符的限制。"
-                "即使启用了长路径支持，这也是Windows的硬性限制。\n"
+                "HINT: This error might be caused by a file or folder name exceeding "
+                "255 characters, which is a Windows limitation even if long paths "
+                "are enabled.\n "
             )
         if len(error.filename) > 260:
-            parts.append("提示：发生此错误可能是因为此系统未启用 Windows 长路径（Long Path）支持。"
-                "你可以访问以下链接了解如何启用此功能：\n"
+            parts.append(
+                "HINT: This error might have occurred since "
+                "this system does not have Windows Long Path "
+                "support enabled. You can find information on "
+                "how to enable this at "
                 "https://pip.pypa.io/warnings/enable-long-paths\n"
             )
     return "".join(parts).strip() + "\n"

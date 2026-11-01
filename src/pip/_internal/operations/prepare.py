@@ -395,10 +395,10 @@ class RequirementPreparer:
     def _log_preparing_link(self, req: InstallRequirement) -> None:
         """Provide context for the requirement being prepared."""
         if req.link.is_file and not req.is_wheel_from_cache:
-            message = "Processing %s"
+            message = "正在处理 %s"
             information = str(display_path(req.link.file_path))
         else:
-            message = "正在收集: %s"
+            message = "正在收集软件包：%s"
             information = redact_auth_from_requirement(req.req) if req.req else str(req)
 
         # If we used req.req, inject requirement source if available (this
@@ -409,7 +409,7 @@ class RequirementPreparer:
             else:
                 comes_from = req.comes_from.from_path()
             if comes_from:
-                information += f" (from {comes_from})"
+                information += f" (来自 {comes_from})"
 
         if (message, information) != self._previous_requirement_header:
             self._previous_requirement_header = (message, information)
@@ -417,7 +417,7 @@ class RequirementPreparer:
 
         if req.is_wheel_from_cache:
             with indent_log():
-                logger.info("使用缓存: %s", req.link.filename)
+                logger.info("正在使用缓存：%s。", req.link.filename)
 
     def _ensure_link_req_src_dir(
         self, req: InstallRequirement, parallel_builds: bool
@@ -583,7 +583,7 @@ class RequirementPreparer:
 
         batch_download = self._download.batch(links_to_fully_download.keys(), temp_dir)
         for link, (filepath, _) in batch_download:
-            logger.debug("正在下载: link %s to %s", link, filepath)
+            logger.debug("Downloading link %s to %s", link, filepath)
             req = links_to_fully_download[link]
             # Record the downloaded file path so wheel reqs can extract a Distribution
             # in .get_dist().
@@ -870,7 +870,7 @@ class RequirementPreparer:
             f"is set to {req.satisfied_by}"
         )
         logger.info(
-            "Requirement %s: %s (%s)", skip_reason, req, req.satisfied_by.version
+            "依赖 %s: %s (%s)", skip_reason, req, req.satisfied_by.version
         )
         with indent_log():
             if self.require_hashes:

@@ -131,6 +131,6 @@ class CompletionCommand(Command):
             return SUCCESS
         else:
             sys.stderr.write(
-                "错误: You must pass {}\n".format(" or ".join(shell_options))
+                "ERROR: You must pass {}\n".format(" or ".join(shell_options))
             )
             return SUCCESS

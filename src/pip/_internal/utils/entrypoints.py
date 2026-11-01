@@ -34,7 +34,7 @@ def _wrapper(args: list[str] | None = None) -> int:
     our old entrypoints as wrappers for the current one.
     """
     sys.stderr.write(
-        "警告: pip is being invoked by an old script wrapper. This will "
+        "警告：pip 正在被旧脚本包装器调用。这将 "
         "fail in a future version of pip.\n"
         "Please see https://github.com/pypa/pip/issues/5599 for advice on "
         "fixing the underlying issue.\n"

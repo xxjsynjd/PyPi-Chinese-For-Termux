@@ -106,14 +106,14 @@ class PrettyHelpFormatter(optparse.IndentedHelpFormatter):
         if there is no description.
         """
         contents = self.indent_lines(textwrap.dedent(usage), "  ")
-        msg = f"\n[optparse.groups]Usage:[/] {escape(contents)}\n"
+        msg = f"\n[optparse.groups]用法:[/] {escape(contents)}\n"
         return msg
 
     def format_description(self, description: str | None) -> str:
         # leave full control over description to us
         if description:
             if hasattr(self.parser, "main"):
-                label = "[optparse.groups]Commands:[/]"
+                label = "[optparse.groups]命令:[/]"
             else:
                 label = "[optparse.groups]Description:[/]"
 

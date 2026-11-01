@@ -428,7 +428,7 @@ class Resolver(BaseResolver):
             supported_tags=get_supported(),
         )
         if cache_entry is not None:
-            logger.debug("使用缓存: wheel link: %s", cache_entry.link)
+            logger.debug("Using cached wheel link: %s", cache_entry.link)
             if req.link is req.original_link and cache_entry.persistent:
                 req.cached_wheel_source_link = req.link
             if cache_entry.origin is not None:
@@ -482,7 +482,7 @@ class Resolver(BaseResolver):
                 self._set_req_to_reinstall(req)
             else:
                 logger.info(
-                    "Requirement already satisfied (use --upgrade to upgrade): %s",
+                    "依然已存在。(使用 --upgrade 以升级软件包。): %s",
                     req,
                 )
         return dist
