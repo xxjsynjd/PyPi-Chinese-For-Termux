@@ -55,7 +55,7 @@ def install_given_reqs(
 
     if to_install:
         logger.info(
-            "Installing collected packages: %s",
+            "正在安装收集到的软件包：%s",
             ", ".join(to_install.keys()),
         )
 

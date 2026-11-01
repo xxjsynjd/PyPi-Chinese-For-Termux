@@ -103,7 +103,7 @@ class SourceDistribution(AbstractDistribution):
             self.req.build_env.install_requirements(
                 pyproject_requires,
                 "overlay",
-                kind="build dependencies",
+                kind="构建依赖",
                 for_req=self.req,
             )
         conflicting, missing = self.req.build_env.check_requirements(
