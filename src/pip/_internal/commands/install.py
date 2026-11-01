@@ -260,7 +260,7 @@ class InstallCommand(RequirementCommand):
                 '"eager" - dependencies are upgraded regardless of '
                 "whether the currently installed version satisfies the "
                 "requirements of the upgraded package(s). "
-                '"only-if-needed" -  are upgraded only when they do not '
+                '"only-if-needed" -  are upgraded only when they 不要 '
                 "satisfy the requirements of the upgraded package(s)."
             ),
         )
@@ -298,14 +298,14 @@ class InstallCommand(RequirementCommand):
             action="store_true",
             dest="compile",
             default=True,
-            help="Compile Python source files to bytecode",
+            help="编译Python资源文件到字节码",
         )
 
         self.cmd_opts.add_option(
             "--no-compile",
             action="store_false",
             dest="compile",
-            help="Do not compile Python source files to bytecode",
+            help="不要编译Python资源文件到字节码",
         )
 
         self.cmd_opts.add_option(
@@ -313,14 +313,14 @@ class InstallCommand(RequirementCommand):
             action="store_false",
             dest="warn_script_location",
             default=True,
-            help="Do not warn when installing scripts outside PATH",
+            help="不要在将脚本安装到非PATH路径的时候弹出警告。",
         )
         self.cmd_opts.add_option(
             "--no-warn-conflicts",
             action="store_false",
             dest="warn_about_conflicts",
             default=True,
-            help="Do not warn about broken dependencies",
+            help="不要警告损坏的依赖",
         )
         self.cmd_opts.add_option(cmdoptions.require_hashes())
         self.cmd_opts.add_option(cmdoptions.no_require_hashes())
@@ -347,13 +347,10 @@ class InstallCommand(RequirementCommand):
             metavar="file",
             default=None,
             help=(
-                "Generate a JSON file describing what pip did to install "
-                "the provided requirements. "
-                "Can be used in combination with --dry-run and --ignore-installed "
-                "to 'resolve' the requirements. "
-                "When - is used as file name it writes to stdout. "
-                "When writing to stdout, please combine with the --quiet option "
-                "to avoid mixing pip logging output with JSON output."
+                "生成 JSON 文件，描述 pip 为安装指定依赖所执行的操作。"
+                "可与 --dry-run 和 --ignore-installed 配合使用，仅对依赖进行解析。"
+                "若文件名使用 -，则输出到标准输出。"
+                "输出到标准输出时，请搭配 --quiet 参数，避免 pip 日志和 JSON 内容混杂。"
             ),
         )
 
@@ -371,7 +368,7 @@ class InstallCommand(RequirementCommand):
     @with_cleanup
     def run(self, options: Values, args: list[str]) -> int:
         if options.use_user_site and options.target_dir is not None:
-            raise CommandError("Can not combine '--user' and '--target'")
+            raise CommandError("不能同时使用 '--user' 和 '--target' 参数")
 
         # Check whether the environment we're installing into is externally
         # managed, as specified in PEP 668. Specifying --root, --target, or
@@ -399,7 +396,7 @@ class InstallCommand(RequirementCommand):
         cmdoptions.check_dist_restriction(options, check_target=True)
         cmdoptions.check_release_control_exclusive(options)
 
-        logger.verbose("Using %s", get_pip_version())
+        logger.verbose("正在使用：%s。", get_pip_version())
         options.use_user_site = decide_user_install(
             options.use_user_site,
             prefix_path=options.prefix_path,
@@ -420,7 +417,7 @@ class InstallCommand(RequirementCommand):
                 # fmt: on
             ):
                 raise CommandError(
-                    "Target path exists but is not a directory, will not continue."
+                    "目标路径存在，但是它不是一个文件夹，将不再继续。"
                 )
 
             # Create a target directory for using with the target option
@@ -494,7 +491,7 @@ class InstallCommand(RequirementCommand):
                 )
                 if would_install_items:
                     write_output(
-                        "Would install %s",
+                        "将要安装 %s。",
                         " ".join("-".join(item) for item in would_install_items),
                     )
                 return SUCCESS
@@ -634,17 +631,13 @@ class InstallCommand(RequirementCommand):
                 if os.path.exists(target_item_dir):
                     if not upgrade:
                         logger.warning(
-                            "Target directory %s already exists. Specify "
-                            "--upgrade to force replacement.",
+                            "目标目录 %s 已存在。请指定 --upgrade 来强制覆盖。",
                             target_item_dir,
                         )
                         continue
                     if os.path.islink(target_item_dir):
                         logger.warning(
-                            "Target directory %s already exists and is "
-                            "a link. pip will not automatically replace "
-                            "links, please remove if replacement is "
-                            "desired.",
+                            "目标目录 %s 已存在且为软链接。pip 不会自动替换链接，如需替换请手动删除。",
                             target_item_dir,
                         )
                         continue
@@ -662,8 +655,7 @@ class InstallCommand(RequirementCommand):
             return check_install_conflicts(to_install)
         except Exception:
             logger.exception(
-                "Error while checking for conflicts. Please file an issue on "
-                "pip's issue tracker: https://github.com/pypa/pip/issues/new"
+                "检查依赖冲突时出错。请到 pip 的问题跟踪器提交反馈：https://github.com/pypa/pip/issues/new"
             )
             return None
 
@@ -677,16 +669,13 @@ class InstallCommand(RequirementCommand):
         parts: list[str] = []
         if resolver_variant == "legacy":
             parts.append(
-                "pip's legacy dependency resolver does not consider dependency "
-                "conflicts when selecting packages. This behaviour is the "
-                "source of the following dependency conflicts."
+                "pip的旧版依赖解析器在选择软件包时不会检查依赖冲突。该行为是产生以下依赖冲突的原因。"
             )
         else:
             assert resolver_variant == "resolvelib"
             parts.append(
-                "pip's dependency resolver does not currently take into account "
-                "all the packages that are installed. This behaviour is the "
-                "source of the following dependency conflicts."
+                "pip的依赖解析器目前不会考虑 "
+                "所有已安装的软件包。该行为是产生以下依赖冲突的原因。"
             )
 
         # NOTE: There is some duplication here, with commands/check.py
@@ -694,8 +683,8 @@ class InstallCommand(RequirementCommand):
             version = package_set[project_name][0]
             for dependency in missing[project_name]:
                 message = (
-                    f"{project_name} {version} requires {dependency[1]}, "
-                    "which is not installed."
+                    f"{project_name} {version} 依赖于 {dependency[1]}, "
+                    "但是没有被安装。"
                 )
                 parts.append(message)
 
@@ -703,7 +692,7 @@ class InstallCommand(RequirementCommand):
             version = package_set[project_name][0]
             for dep_name, dep_version, req in conflicting[project_name]:
                 message = (
-                    "{name} {version} requires {requirement}, but {you} have "
+                    "{name} {version} 依赖于 {requirement}, but {you} have "
                     "{dep_name} {dep_version} which is incompatible."
                 ).format(
                     name=project_name,
@@ -739,7 +728,7 @@ def installed_packages_summary(
 
     if not summary:
         return ""
-    return f"安装成功： {' '.join(summary)}"
+    return f"安装成功：{' '.join(summary)}"
 
 
 def get_lib_location_guesses(
@@ -792,13 +781,11 @@ def decide_user_install(
     if use_user_site:
         if prefix_path:
             raise CommandError(
-                "Can not combine '--user' and '--prefix' as they imply "
-                "different installation locations"
+                "不能同时使用 '--user' 和 '--prefix'，二者代表不同的安装位置"
             )
         if virtualenv_no_global():
             raise InstallationError(
-                "Can not perform a '--user' install. User site-packages "
-                "are not visible in this virtualenv."
+                "无法执行 '--user' 安装。当前 Python 已禁用用户 site-packages。"
             )
         # Catch all remaining cases which honour the site.ENABLE_USER_SITE
         # value, such as a plain Python installation (e.g. no virtualenv).
@@ -815,12 +802,12 @@ def decide_user_install(
 
     # user install incompatible with --prefix/--target
     if prefix_path or target_dir:
-        logger.debug("Non-user install due to --prefix or --target option")
+        logger.debug("根据明确请求执行用户目录安装")
         return False
 
     # If user installs are not enabled, choose a non-user install
     if not site.ENABLE_USER_SITE:
-        logger.debug("Non-user install because user site-packages disabled")
+        logger.debug("因指定 --prefix 或 --target 参数，不使用用户目录安装")
         return False
 
     # If we have permission for a non-user install, do that,
@@ -830,8 +817,7 @@ def decide_user_install(
         return False
 
     logger.info(
-        "Defaulting to user installation because normal site-packages "
-        "is not writeable"
+        "默认使用用户目录安装，因为普通 site-packages 目录不可写"
     )
     return True
 
@@ -846,7 +832,7 @@ def create_os_error_message(
     parts = []
 
     # Mention the error if we are not going to show a traceback
-    parts.append("Could not install packages due to an OSError")
+    parts.append("因操作系统错误，无法安装软件包")
     if not show_traceback:
         parts.append(": ")
         parts.append(str(error))
@@ -859,8 +845,8 @@ def create_os_error_message(
     # Suggest useful actions to the user:
     #  (1) using user site-packages or (2) verifying the permissions
     if error.errno == errno.EACCES:
-        user_option_part = "Consider using the `--user` option"
-        permissions_part = "Check the permissions"
+        user_option_part = "可考虑使用 `--user` 参数"
+        permissions_part = "请检查权限"
 
         if not running_under_virtualenv() and not using_user_site:
             parts.extend(
@@ -877,7 +863,7 @@ def create_os_error_message(
     # Suggest to check "pip config debug" in case of invalid proxy
     if type(error) is InvalidProxyURL:
         parts.append(
-            'Consider checking your local proxy configuration with "pip config debug"'
+            '可尝试使用 "pip config debug" 检查本地代理配置'
         )
         parts.append(".\n")
 
@@ -889,16 +875,12 @@ def create_os_error_message(
     if WINDOWS and error.errno in (errno.EINVAL, errno.ENOENT) and error.filename:
         if any(len(part) > 255 for part in Path(error.filename).parts):
             parts.append(
-                "HINT: This error might be caused by a file or folder name exceeding "
-                "255 characters, which is a Windows limitation even if long paths "
-                "are enabled.\n "
+                "提示：该错误可能是文件或文件夹名称超过255个字符导致，"
+                "即使开启长路径支持，Windows 仍存在该限制。\n "
             )
         if len(error.filename) > 260:
             parts.append(
-                "HINT: This error might have occurred since "
-                "this system does not have Windows Long Path "
-                "support enabled. You can find information on "
-                "how to enable this at "
-                "https://pip.pypa.io/warnings/enable-long-paths\n"
+                "提示：出现该错误可能是因为当前系统未开启 Windows 长路径支持。"
+                "你可以在 https://pip.pypa.io/warnings/enable-long-paths\n"
             )
     return "".join(parts).strip() + "\n"

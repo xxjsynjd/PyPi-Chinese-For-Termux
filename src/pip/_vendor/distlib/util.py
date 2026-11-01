@@ -568,10 +568,10 @@ class FileOperator(object):
             # all the files specified.
             for f in files:
                 if self.dry_run:
-                    logger.info("changing mode of %s", f)
+                    logger.info("正在修改权限：%s", f)
                 else:
                     mode = (os.stat(f).st_mode | bits) & mask
-                    logger.info("changing mode of %s to %o", f, mode)
+                    logger.info("正在修改权限：%s 为 %o", f, mode)
                     os.chmod(f, mode)
 
     set_executable_mode = lambda s, f: s.set_mode(0o555, 0o7777, f)

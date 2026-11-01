@@ -261,7 +261,7 @@ def parse_wheel_filename(
     dashes = filename.count("-")
     if dashes not in (4, 5):
         raise InvalidWheelFilename(
-            f"Invalid wheel filename (wrong number of parts): {filename!r}"
+            f"无效的轮子文件名（分段数量错误）：{filename!r}"
         )
 
     parts = filename.split("-", dashes - 2)

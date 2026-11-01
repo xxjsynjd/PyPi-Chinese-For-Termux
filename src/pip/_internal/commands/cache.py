@@ -67,8 +67,7 @@ class CacheCommand(Command):
 
         # Determine action
         if not args or args[0] not in handler_map:
-            logger.error(
-                "Need an action (%s) to perform.",
+            logger.error("需要指定操作动作（%s）才能执行。",
                 ", ".join(sorted(handler_map)),
             )
             return ERROR
@@ -108,13 +107,13 @@ class CacheCommand(Command):
 
         message = (
             textwrap.dedent("""
-                    Package index page cache location (pip v23.3+): {http_cache_location}
-                    Package index page cache location (older pips): {old_http_cache_location}
-                    Package index page cache size: {http_cache_size}
-                    Number of HTTP files: {num_http_files}
-                    Locally built wheels location: {wheels_cache_location}
-                    Locally built wheels size: {wheels_cache_size}
-                    Number of locally built wheels: {package_count}
+                    软件包索引页面缓存位置（pip v23.3+）：{http_cache_location}
+                    软件包索引页面缓存位置（旧版pip）：{old_http_cache_location}
+                    软件包索引页面缓存大小：{http_cache_size}
+                    HTTP缓存文件数量：{num_http_files}
+                    本地构建轮子存放位置：{wheels_cache_location}
+                    本地构建轮子占用大小：{wheels_cache_size}
+                    本地构建轮子数量：{package_count}
                 """)  # noqa: E501
             .format(
                 http_cache_location=http_cache_location,
@@ -147,7 +146,7 @@ class CacheCommand(Command):
 
     def format_for_human(self, files: list[str]) -> None:
         if not files:
-            logger.info("No locally built wheels cached.")
+            logger.info("没有缓存本地构建的轮子文件。")
             return
 
         results = []
@@ -155,7 +154,7 @@ class CacheCommand(Command):
             wheel = os.path.basename(filename)
             size = filesystem.format_file_size(filename)
             results.append(f" - {wheel} ({size})")
-        logger.info("Cache contents:\n")
+        logger.info("缓存列表:\n")
         logger.info("\n".join(sorted(results)))
 
     def format_for_abspath(self, files: list[str]) -> None:
@@ -164,14 +163,15 @@ class CacheCommand(Command):
 
     def remove_cache_items(self, options: Values, args: list[str]) -> None:
         if len(args) > 1:
-            raise CommandError("Too many arguments")
+            raise CommandError("提供的参数过多。")
 
         if not args:
-            raise CommandError("Please provide a pattern")
+            logger.error("请提供匹配模式。")
+            return
 
         files = self._find_wheels(options, args[0])
 
-        no_matching_msg = "No matching packages"
+        no_matching_msg = "未匹配到包。"
         if args[0] == "*":
             # Only fetch http files if no specific pattern given
             files += self._find_http_files(options)

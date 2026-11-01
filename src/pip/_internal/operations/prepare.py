@@ -583,7 +583,7 @@ class RequirementPreparer:
 
         batch_download = self._download.batch(links_to_fully_download.keys(), temp_dir)
         for link, (filepath, _) in batch_download:
-            logger.debug("Downloading link %s to %s", link, filepath)
+            logger.debug("正在下载链接 %s 到 %s", link, filepath)
             req = links_to_fully_download[link]
             # Record the downloaded file path so wheel reqs can extract a Distribution
             # in .get_dist().

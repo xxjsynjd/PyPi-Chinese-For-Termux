@@ -188,14 +188,14 @@ class LinkEvaluator:
         else:
             egg_info, ext = link.splitext()
             if not ext:
-                return (LinkType.format_unsupported, "not a file")
+                return (LinkType.format_unsupported, "并非文件")
             if ext not in SUPPORTED_EXTENSIONS:
                 return (
                     LinkType.format_unsupported,
-                    f"unsupported archive format: {ext}",
+                    f"不支持的压缩包格式: {ext}",
                 )
             if "binary" not in self._formats and ext == WHEEL_EXTENSION:
-                reason = f"No binaries permitted for {self.project_name}"
+                reason = f"不允许为 {self.project_name} 使用二进制包"
                 return (LinkType.format_unsupported, reason)
             if "macosx10" in link.path and ext == ".zip":
                 return (LinkType.format_unsupported, "macosx10 one")
@@ -205,7 +205,7 @@ class LinkEvaluator:
                 except InvalidWheelFilename:
                     return (
                         LinkType.format_invalid,
-                        "invalid wheel filename",
+                        "无效的轮子文件名 - 不支持的格式或者魔数。",
                     )
                 if wheel.name != self._canonical_name:
                     reason = f"wrong project name (not {self.project_name})"
@@ -217,8 +217,8 @@ class LinkEvaluator:
                     # simplify troubleshooting compatibility issues.
                     file_tags = ", ".join(wheel.get_formatted_file_tags())
                     reason = (
-                        f"none of the wheel's tags ({file_tags}) are compatible "
-                        f"(run pip debug --verbose to show compatible tags)"
+                        f"该wheel包标签({file_tags})均不兼容 " \
+                        f"（执行 pip debug --verbose 查看支持的标签）"
                     )
                     return (LinkType.platform_mismatch, reason)
 
@@ -290,7 +290,7 @@ class LinkEvaluator:
             reason = f"{version} Requires-Python {requires_python}"
             return (LinkType.requires_python_mismatch, reason)
 
-        logger.debug("Found link %s, version: %s", link, version)
+        logger.debug("找到链接 %s，版本：%s", link, version)
 
         return (LinkType.candidate, version)
 
@@ -810,7 +810,7 @@ class PackageFinder:
     def _log_skipped_link(self, link: Link, result: LinkType, detail: str) -> None:
         # Put the link at the end so the reason is more visible and because
         # the link string is usually very long.
-        logger.debug("Skipping link: %s: %s", detail, link)
+        logger.debug("跳过链接：%s：%s", detail, link)
         if result == LinkType.requires_python_mismatch:
             self._requires_python_skipped.add(detail)
 
@@ -857,7 +857,7 @@ class PackageFinder:
         self, project_url: Link, link_evaluator: LinkEvaluator
     ) -> list[InstallationCandidate]:
         logger.debug(
-            "Fetching project page and analyzing links: %s",
+            "正在获取项目页面并解析链接：%s",
             project_url,
         )
         index_response = self._link_collector.fetch_response(
@@ -1083,7 +1083,7 @@ class PackageFinder:
 
         if _should_install_candidate(best_candidate):
             logger.debug(
-                "Using version %s (newest of versions: %s)",
+                "选用版本 %s（可用最新版本：%s）",
                 best_candidate.version,
                 _format_versions(best_candidate_result.applicable_candidates),
             )

@@ -46,7 +46,7 @@ def get_build_tracker() -> Generator[BuildTracker, None, None]:
         if root is None:
             root = ctx.enter_context(TempDirectory(kind="build-tracker")).path
             ctx.enter_context(update_env_context_manager(PIP_BUILD_TRACKER=root))
-            logger.debug("Initialized build tracking at %s", root)
+            logger.debug("已在 %s 初始化构建跟踪", root)
 
         with BuildTracker(root) as tracker:
             yield tracker
@@ -68,10 +68,10 @@ class BuildTracker:
     def __init__(self, root: str) -> None:
         self._root = root
         self._entries: dict[TrackerId, InstallRequirement] = {}
-        logger.debug("Created build tracker: %s", self._root)
+        logger.debug("已创建构建跟踪器：%s", self._root)
 
     def __enter__(self) -> BuildTracker:
-        logger.debug("Entered build tracker: %s", self._root)
+        logger.debug("进入构建跟踪器：%s", self._root)
         return self
 
     def __exit__(
@@ -126,7 +126,7 @@ class BuildTracker:
         for key, req in list(self._entries.items()):
             self.remove(req, key)
 
-        logger.debug("Removed build tracker: %r", self._root)
+        logger.debug("已移除构建跟踪器：%r", self._root)
 
     @contextlib.contextmanager
     def track(self, req: InstallRequirement, key: str) -> Generator[None, None, None]:

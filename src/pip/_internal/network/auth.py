@@ -378,7 +378,7 @@ class MultiDomainBasicAuth(AuthBase):
             index_info = split_auth_netloc_from_url(index_url)
             if index_info:
                 index_url, _, index_url_user_password = index_info
-                logger.debug("Found index url %s", index_url)
+                logger.debug("已找到索引地址 %s", index_url)
 
         # If an index URL was found, try its embedded credentials
         if index_url and index_url_user_password[0] is not None:

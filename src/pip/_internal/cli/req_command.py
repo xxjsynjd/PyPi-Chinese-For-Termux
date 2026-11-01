@@ -236,7 +236,7 @@ class RequirementCommand(IndexGroupCommand):
             build_isolation = "venv"
             if "inprocess-build-deps" in options.features_enabled:
                 logger.warning(
-                    "Using --use-feature 'inprocess-build-deps' and 'venv-isolation'"
+                    "已启用 --use-feature 'inprocess-build-deps' 和 'venv-isolation'"
                     " together is currently partially supported. If you encounter"
                     " broken behaviour, use only one feature."
                 )
@@ -378,7 +378,7 @@ class RequirementCommand(IndexGroupCommand):
             filename_without_extras, extras = strip_extras(filename)
             if is_valid_pylock_filename(filename_without_extras):
                 logger.warning(
-                    "Using pylock.toml as a requirements source "
+                    "使用 pylock.toml 作为依赖源 "
                     "is an experimental feature. "
                     "It may be removed/changed in a future release "
                     "without prior warning."

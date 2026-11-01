@@ -19,4 +19,4 @@ class InvalidWheel(InstallationError):
         self.name = name
 
     def __str__(self) -> str:
-        return f"Wheel '{self.name}' located at {self.location} is invalid."
+        return f"轮子包 '{self.name}'（路径：{self.location}）无效。"

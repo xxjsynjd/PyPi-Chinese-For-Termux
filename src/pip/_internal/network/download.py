@@ -84,11 +84,11 @@ def _log_download(
             logged_url = f"{logged_url} ({format_size(total_length)})"
 
     if is_from_cache(resp):
-        logger.info("Using cached %s", logged_url)
+        logger.info("使用缓存 %s", logged_url)
     elif range_start:
         logger.info("Resuming download %s", logged_url)
     else:
-        logger.info("Downloading %s", logged_url)
+        logger.info("正在下载 %s", logged_url)
 
     if logger.getEffectiveLevel() > logging.INFO:
         show_progress = False

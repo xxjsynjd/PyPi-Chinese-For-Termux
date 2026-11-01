@@ -153,7 +153,7 @@ class CacheController:
         assert cache_url is not None
         cache_data = self.cache.get(cache_url)
         if cache_data is None:
-            logger.debug("No cache entry available")
+            logger.debug("无可用缓存条目")
             return None
 
         if isinstance(self.cache, SeparateBodyBaseCache):
@@ -173,7 +173,7 @@ class CacheController:
         """
         assert request.url is not None
         cache_url = self.cache_url(request.url)
-        logger.debug('Looking up "%s" in the cache', cache_url)
+        logger.debug('正在缓存中查询 "%s"', cache_url)
         cc = self.parse_cache_control(request.headers)
 
         # Bail out if the request insists on fresh data
@@ -222,7 +222,7 @@ class CacheController:
         assert time_tuple is not None
         date = calendar.timegm(time_tuple[:6])
         current_age = max(0, now - date)
-        logger.debug("Current age based on date: %i", current_age)
+        logger.debug("基于日期计算的缓存有效期：%i", current_age)
 
         # TODO: There is an assumption that the result will be a
         #       urllib3 response object. This may not be best since we
@@ -348,7 +348,7 @@ class CacheController:
         cacheable_status_codes = status_codes or self.cacheable_status_codes
         if response.status not in cacheable_status_codes:
             logger.debug(
-                "Status code %s not in %s", response.status, cacheable_status_codes
+                "状态码 %s 不在可缓存列表 %s 内", response.status, cacheable_status_codes
             )
             return
 

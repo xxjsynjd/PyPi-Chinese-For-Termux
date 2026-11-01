@@ -1060,7 +1060,7 @@ class HTTPSConnectionPool(HTTPConnectionPool):
         """
         self.num_connections += 1
         log.debug(
-            "Starting new HTTPS connection (%d): %s:%s",
+            "正在发起HTTPS连接 (%d)：%s:%s",
             self.num_connections,
             self.host,
             self.port or "443",

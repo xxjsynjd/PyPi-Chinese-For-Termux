@@ -262,8 +262,8 @@ class Resolver(BaseResolver):
         )
         if has_conflicting_requirement:
             raise InstallationError(
-                f"Double requirement given: {install_req} "
-                f"(already in {existing_req}, name={install_req.name!r})"
+                f"重复指定依赖：{install_req} "
+                f"（已存在于 {existing_req}，名称={install_req.name!r}）"
             )
 
         # When no existing requirement exists, add the requirement as a
@@ -283,9 +283,8 @@ class Resolver(BaseResolver):
         )
         if does_not_satisfy_constraint:
             raise InstallationError(
-                f"Could not satisfy constraints for '{install_req.name}': "
-                "installation from path or url cannot be "
-                "constrained to a version"
+                f"无法满足 '{install_req.name}' 的约束条件："
+                "从本地路径或URL进行安装不能被版本约束限制"
             )
         # If we're now installing a constraint, mark the existing
         # object for real installation.
@@ -368,7 +367,7 @@ class Resolver(BaseResolver):
                 self.finder.find_requirement(req_to_install, upgrade=True)
             except BestVersionAlreadyInstalled:
                 # Then the best version is installed.
-                return "already up-to-date"
+                return "已满足依赖，跳过升级"
             except DistributionNotFound:
                 # No distribution found, so we squash the error.  It will
                 # be raised later when we re-try later to do the install.
@@ -392,9 +391,9 @@ class Resolver(BaseResolver):
                 # Mark this as a unicode string to prevent
                 # "UnicodeEncodeError: 'ascii' codec can't encode character"
                 # in Python 2 when the reason contains non-ascii characters.
-                "The candidate selected for download or install is a "
-                f"yanked version: {best_candidate}\n"
-                f"Reason for being yanked: {reason}"
+                "选择用于下载或安装的候选版本为已撤回版本："
+                f"{best_candidate}\n"
+                f"撤回原因：{reason}"
             )
             logger.warning(msg)
 
@@ -428,7 +427,7 @@ class Resolver(BaseResolver):
             supported_tags=get_supported(),
         )
         if cache_entry is not None:
-            logger.debug("Using cached wheel link: %s", cache_entry.link)
+            logger.debug("使用缓存的wheel链接：%s", cache_entry.link)
             if req.link is req.original_link and cache_entry.persistent:
                 req.cached_wheel_source_link = req.link
             if cache_entry.origin is not None:
@@ -548,7 +547,7 @@ class Resolver(BaseResolver):
             if not self.ignore_dependencies:
                 if req_to_install.extras:
                     logger.debug(
-                        "Installing extra requirements: %r",
+                        "正在安装额外依赖：%r",
                         ",".join(req_to_install.extras),
                     )
                 missing_requested = sorted(
@@ -556,7 +555,7 @@ class Resolver(BaseResolver):
                 )
                 for missing in missing_requested:
                     logger.warning(
-                        "%s %s does not provide the extra '%s'",
+                        "%s %s 未提供附加模块 '%s'",
                         dist.raw_name,
                         dist.version,
                         missing,

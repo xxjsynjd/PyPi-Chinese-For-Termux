@@ -290,7 +290,7 @@ class LinkCandidate(_InstallRequirementBackedCandidate):
         source_link = link
         cache_entry = factory.get_wheel_cache_entry(source_link, name)
         if cache_entry is not None:
-            logger.debug("Using cached wheel link: %s", cache_entry.link)
+            logger.debug("使用缓存的wheel链接：%s", cache_entry.link)
             link = cache_entry.link
         ireq = make_install_req_from_link(
             link,

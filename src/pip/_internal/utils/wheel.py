@@ -26,7 +26,7 @@ def parse_wheel(wheel_zip: ZipFile, name: str) -> tuple[str, Message]:
         metadata = wheel_metadata(wheel_zip, info_dir)
         version = wheel_version(metadata)
     except UnsupportedWheel as e:
-        raise UnsupportedWheel(f"{name} has an invalid wheel, {e}")
+        raise UnsupportedWheel(f"包 {name} 的轮子包无效，{e}")
 
     check_compatibility(version, name)
 
@@ -45,11 +45,11 @@ def wheel_dist_info_dir(source: ZipFile, name: str) -> str:
     info_dirs = [s for s in subdirs if s.endswith(".dist-info")]
 
     if not info_dirs:
-        raise UnsupportedWheel(".dist-info directory not found")
+        raise UnsupportedWheel("未找到.dist-info元信息目录")
 
     if len(info_dirs) > 1:
         raise UnsupportedWheel(
-            "multiple .dist-info directories found: {}".format(", ".join(info_dirs))
+            "发现多个.dist-info元信息目录：{}".format(", ".join(info_dirs))
         )
 
     info_dir = info_dirs[0]
@@ -58,7 +58,7 @@ def wheel_dist_info_dir(source: ZipFile, name: str) -> str:
     canonical_name = canonicalize_name(name)
     if not info_dir_name.startswith(canonical_name):
         raise UnsupportedWheel(
-            f".dist-info directory {info_dir!r} does not start with {canonical_name!r}"
+            f".dist-info目录 {info_dir!r} 的前缀和规范包名 {canonical_name!r} 不匹配"
         )
 
     return info_dir
@@ -84,7 +84,7 @@ def wheel_metadata(source: ZipFile, dist_info_dir: str) -> Message:
     try:
         wheel_text = wheel_contents.decode()
     except UnicodeDecodeError as e:
-        raise UnsupportedWheel(f"error decoding {path!r}: {e!r}")
+        raise UnsupportedWheel(f"解码错误 {path!r}: {e!r}")
 
     # FeedParser (used by Parser) does not raise any exceptions. The returned
     # message may have .defects populated, but for backwards-compatibility we
@@ -98,14 +98,14 @@ def wheel_version(wheel_data: Message) -> tuple[int, ...]:
     """
     version_text = wheel_data["Wheel-Version"]
     if version_text is None:
-        raise UnsupportedWheel("WHEEL is missing Wheel-Version")
+        raise UnsupportedWheel("该轮子缺失有关于此轮子的版本号。")
 
     version = version_text.strip()
 
     try:
         return tuple(map(int, version.split(".")))
     except ValueError:
-        raise UnsupportedWheel(f"invalid Wheel-Version: {version!r}")
+        raise UnsupportedWheel(f"无效的轮子版本号: {version!r}")
 
 
 def check_compatibility(version: tuple[int, ...], name: str) -> None:
@@ -122,11 +122,11 @@ def check_compatibility(version: tuple[int, ...], name: str) -> None:
     """
     if version[0] > VERSION_COMPATIBLE[0]:
         raise UnsupportedWheel(
-            "{}'s Wheel-Version ({}) is not compatible with this version "
-            "of pip".format(name, ".".join(map(str, version)))
+            "{} 的轮子版本（{}）和当前版本的pip不兼。"
+            .format(name, ".".join(map(str, version)))
         )
     elif version > VERSION_COMPATIBLE:
         logger.warning(
-            "Installing from a newer Wheel-Version (%s)",
+            "正在从一个新的轮子版本号 (%s) 安装轮子，请稍后...",
             ".".join(map(str, version)),
         )

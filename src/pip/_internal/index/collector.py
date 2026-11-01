@@ -131,7 +131,7 @@ def _get_simple_response(
     if is_archive_file(Link(url).filename):
         _ensure_api_response(url, session=session)
 
-    logger.debug("Getting page %s", redact_auth_from_url(url))
+    logger.debug("正在获取页面 %s", redact_auth_from_url(url))
 
     headers = {
         "Accept": ", ".join(
@@ -162,7 +162,7 @@ def _get_simple_response(
     _ensure_api_header(resp)
 
     logger.debug(
-        "Fetched page %s as %s",
+        "已获取页面 %s，格式：%s",
         redact_auth_from_url(url),
         resp.headers.get("Content-Type", "Unknown"),
     )
@@ -499,8 +499,7 @@ class LinkCollector:
                 if s is not None and s.link is not None
             ]
             lines = [
-                f"{len(lines)} location(s) to search "
-                f"for versions of {project_name}:"
+                f"共{len(lines)}个位置用于查找{project_name}的版本："
             ] + lines
             logger.debug("\n".join(lines))
 

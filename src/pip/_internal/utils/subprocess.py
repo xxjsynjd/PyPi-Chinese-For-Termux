@@ -119,7 +119,7 @@ def call_subprocess(
     # and we have a spinner.
     use_spinner = not showing_subprocess and spinner is not None
 
-    log_subprocess("Running command %s", command_desc)
+    log_subprocess("正在运行命令：%s", command_desc)
     env = os.environ.copy()
     if extra_environ:
         env.update(extra_environ)
@@ -140,7 +140,7 @@ def call_subprocess(
     except Exception as exc:
         if log_failed_cmd:
             subprocess_logger.critical(
-                "Error %s while executing command %s",
+                "执行命令 %s 时发生错误 %s",
                 exc,
                 command_desc,
             )
@@ -200,12 +200,12 @@ def call_subprocess(
             if log_failed_cmd:
                 subprocess_logger.error("%s", error, extra={"rich": True})
                 subprocess_logger.verbose(
-                    "[bold magenta]full command[/]: [blue]%s[/]",
+                    "[bold magenta]完整命令[/]: [blue]%s[/]",
                     escape(format_command_args(cmd)),
                     extra={"markup": True},
                 )
                 subprocess_logger.verbose(
-                    "[bold magenta]cwd[/]: %s",
+                    "[bold magenta]工件目录[/]: %s",
                     escape(cwd or "[inherit]"),
                     extra={"markup": True},
                 )
@@ -213,7 +213,7 @@ def call_subprocess(
             raise error
         elif on_returncode == "warn":
             subprocess_logger.warning(
-                'Command "%s" had error code %s in %s',
+                '命令 "%s" 在 %s 目录下执行，返回错误代码 %s',
                 command_desc,
                 proc.returncode,
                 cwd,
@@ -221,7 +221,7 @@ def call_subprocess(
         elif on_returncode == "ignore":
             pass
         else:
-            raise ValueError(f"Invalid value: on_returncode={on_returncode!r}")
+            raise ValueError(f"无效参数值：on_returncode={on_returncode!r}")
     return output
 
 

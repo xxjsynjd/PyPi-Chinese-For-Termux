@@ -197,7 +197,7 @@ def compress_for_output_listing(paths: Iterable[str]) -> tuple[set[str], set[str
 
 class StashedUninstallPathSet:
     """A set of file rename operations to stash files while
-    tentatively uninstalling them."""
+    tentatively 正在卸载 them."""
 
     def __init__(self) -> None:
         # Mapping from source file root to [Adjacent]TempDirectory
@@ -366,7 +366,7 @@ class UninstallPathSet:
             return
 
         dist_name_version = f"{self._dist.raw_name}-{self._dist.raw_version}"
-        logger.info("Uninstalling %s:", dist_name_version)
+        logger.info("正在卸载 %s:", dist_name_version)
 
         with indent_log():
             if auto_confirm or self._allowed_to_proceed(verbose):
@@ -376,12 +376,12 @@ class UninstallPathSet:
 
                 for path in sorted(compact(for_rename)):
                     moved.stash(path)
-                    logger.verbose("Removing file or directory %s", path)
+                    logger.verbose("正在删除文件或目录 %s", path)
 
                 for pth in self._pth.values():
                     pth.remove()
 
-                logger.info("Successfully uninstalled %s", dist_name_version)
+                logger.info("已成功卸载 %s", dist_name_version)
 
     def _allowed_to_proceed(self, verbose: bool) -> bool:
         """Display which files would be deleted and prompt for confirmation"""
@@ -434,7 +434,7 @@ class UninstallPathSet:
         info_location = dist.info_location
         if dist_location is None:
             logger.info(
-                "Not uninstalling %s since it is not installed",
+                "现在不卸载 %s，自它没有被安装以来。",
                 dist.canonical_name,
             )
             return cls(dist)
@@ -442,7 +442,7 @@ class UninstallPathSet:
         normalized_dist_location = normalize_path(dist_location)
         if not dist.local:
             logger.info(
-                "Not uninstalling %s at %s, outside environment %s",
+                "现在正在卸载 %s，位于 %s，不在%s环境内。",
                 dist.canonical_name,
                 normalized_dist_location,
                 sys.prefix,
@@ -455,7 +455,7 @@ class UninstallPathSet:
             if p
         }:
             logger.info(
-                "Not uninstalling %s at %s, as it is in the standard library.",
+                "现在不卸载 %s，位于 %s，因为它是标准库。",
                 dist.canonical_name,
                 normalized_dist_location,
             )
@@ -539,8 +539,8 @@ class UninstallPathSet:
             assert os.path.samefile(
                 normalized_link_pointer, normalized_dist_location
             ), (
-                f"Egg-link {develop_egg_link} (to {link_pointer}) does not match "
-                f"installed location of {dist.raw_name} (at {dist_location})"
+                f"Egg‑链接 {develop_egg_link}（指向 {link_pointer}）与 "
+                f"{dist.raw_name} 的已安装位置（{dist_location}）不匹配"
             )
             paths_to_remove.add(develop_egg_link)
             easy_install_pth = os.path.join(
@@ -550,7 +550,7 @@ class UninstallPathSet:
 
         else:
             logger.debug(
-                "Not sure how to uninstall: %s - Check: %s",
+                "不清楚该如何卸载：%s - 请检查：%s",
                 dist,
                 dist_location,
             )
@@ -608,11 +608,11 @@ class UninstallPthEntries:
         self.entries.add(entry)
 
     def remove(self) -> None:
-        logger.verbose("Removing pth entries from %s:", self.file)
+        logger.verbose("正在从 %s 移除 pth 条目：", self.file)
 
         # If the file doesn't exist, log a warning and return
         if not os.path.isfile(self.file):
-            logger.warning("Cannot remove entries from nonexistent file %s", self.file)
+            logger.warning("无法从不存在的文件 %s 中移除条目", self.file)
             return
         with open(self.file, "rb") as fh:
             # windows uses '\r\n' with py3k, but uses '\n' with py2.x
@@ -627,7 +627,7 @@ class UninstallPthEntries:
             lines[-1] = lines[-1] + endline.encode("utf-8")
         for entry in self.entries:
             try:
-                logger.verbose("Removing entry: %s", entry)
+                logger.verbose("正在移除条目：%s", entry)
                 lines.remove((entry + endline).encode("utf-8"))
             except ValueError:
                 pass
@@ -636,9 +636,9 @@ class UninstallPthEntries:
 
     def rollback(self) -> bool:
         if self._saved_lines is None:
-            logger.error("Cannot roll back changes to %s, none were made", self.file)
+            logger.error("无法回滚对 %s 的修改，没有产生任何变更", self.file)
             return False
-        logger.debug("Rolling %s back to previous state", self.file)
+        logger.debug("正在将 %s 恢复至之前的状态", self.file)
         with open(self.file, "wb") as fh:
             fh.writelines(self._saved_lines)
         return True
